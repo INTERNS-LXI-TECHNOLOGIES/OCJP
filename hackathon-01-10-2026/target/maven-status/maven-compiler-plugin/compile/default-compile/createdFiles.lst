@@ -4,6 +4,7 @@ com\fintech\CreditCardMethod.class
 com\fintech\ThirdPartyGatewayMethod.class
 com\fintech\Auditable.class
 com\fintech\PaymentMethod.class
+com\fintech\WardGovernanceHackathon$AgeComparator.class
 com\fintech\BankTransferMethod.class
 com\fintech\ComplaintsCheckable.class
 com\fintech\LowLevel.class
@@ -15,5 +16,6 @@ com\fintech\WardGovernanceHackathon$Complaint.class
 com\fintech\HighLevel.class
 com\fintech\Currency.class
 com\fintech\PaymentProcesser.class
+com\fintech\WardGovernanceHackathon$HighestProjectComparator.class
 com\fintech\RazerPay.class
 com\fintech\RiskLevel.class

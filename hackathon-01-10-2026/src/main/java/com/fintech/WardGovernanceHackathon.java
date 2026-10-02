@@ -1,6 +1,6 @@
 package com.fintech;
 import java.util.*;
-
+import java.util.stream.*;
 public class WardGovernanceHackathon {
 	
 	
@@ -36,9 +36,60 @@ String name,
 String department,
 double budget,
 String status
-) {
+)implements Comparable<Project> {
+	
+	
+	@Override
+	public int compareTo(Project other){
+		
+		
+		return this.id().compareTo(other.id());
+		
+		
+	}
+	
+	
+	
 	
 }
+
+// my class 
+public static class AgeComparator implements Comparator<Citizen>{
+
+@Override
+public int compare(Citizen one,Citizen two){
+	
+	
+	return Integer.compare(one.age,two.age);
+		
+}
+
+}
+
+
+
+// my class 
+public static class HighestProjectComparator implements Comparator<Project>{
+	
+	
+	
+	@Override
+	public int compare(Project one,Project two){
+		
+		
+		return Double.compare(one.budget,two.budget);
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+}
+
+
 
 
 
@@ -247,15 +298,10 @@ System.out.println(east.size());
    
    for(Complaint c : complaints){
 	   
-	   
-	   
+	    
 	   complaintsSet.add(c.category());
 	   
-	   
-	   
-	   
-	   
-	   
+	 
    }
    
    
@@ -357,6 +403,8 @@ System.out.println("Duplicate IDs found: " + duplicates);
 	
 	//Question 13 — Skills Unique to Ravi
 	
+	   System.out.println("**************  Question 13 — Skills Unique to Ravi  ************ ");
+	
 Set<String> sureshSkills = volunteerSkills.get("Suresh");
 	
 	Set<String> raviUniqueSkills  = new HashSet<>(raviSkills);
@@ -368,12 +416,330 @@ raviUniqueSkills.removeAll(sureshSkills);
 System.out.println("Skills unique to Ravi: " + raviUniqueSkills );
 	
 	
+	
+	//Question 14 — Volunteers With First Aid
+	
+	 System.out.println("**************  Question 14 — Volunteers With First Aid  ************ ");
+	
+	
+	List<String> volunteer =  volunteerSkills.entrySet()
+	                .stream()
+					.filter(n -> n.getValue().contains("FIRST_AID"))
+					.map(n -> n.getKey())
+					.toList();
+	
+	
+	                          
+	System.out.println(volunteer);
+	
+	
+	
+	//Question 15 — Citizens Ordered by Age
+	 System.out.println("**************  Question 15 — Citizens Ordered by Age  ************ ");
+	 
+	 
+	 
+	 TreeSet<Citizen>  treeSetAgeByOrder   = new TreeSet<>(new AgeComparator());
+	 
+	 for(Citizen c : citizens){
+
+       treeSetAgeByOrder.add(c);
+		 
+		 
+		 
+	 }
+	 
+	 System.out.println(treeSetAgeByOrder);
+	
+	
+	
+	
+	//Question 16 — Citizen Lookup
+	 System.out.println("**************  Question 16 — Citizen Lookup  ************ ");
+	
+	
+	Map<String,Citizen> accesByIdKey = new HashMap<>(); 
+	
+	
+	Citizen cc1 = citizens.get(0);
+    Citizen cc2 = citizens.get(1);
+    Citizen cc3 = citizens.get(2);
+    Citizen cc4 = citizens.get(3);		
+		 
+		 
+		 
+		
+	
+	
+	accesByIdKey.put("c001",cc1);
+	accesByIdKey.put("c002",cc2);
+	accesByIdKey.put("c003",cc3);
+	accesByIdKey.put("c004",cc4);
+	
+	System.out.println(accesByIdKey.get("c001"));
+	
+	
+	
+	
+	
+	
+	
+	//Question 17 — Check Citizen Existence
+	System.out.println("**************  Question 17 — Check Citizen Existence  ************ ");
+	
+	
+   System.out.println(accesByIdKey.containsKey("c009"));
+	
+
+
+
+
+
+//Question 18 — Count Complaints by Category
+System.out.println("**************  Question 18 — Count Complaints by Category  ************ ");
+
+
+
+for(Complaint c : complaints){
+	
+	
+	
+	
+	
+	
 }
 
 
 
 
 
+
+//Question 19 — Count Using Streams
+
+System.out.println("**************  Question 19 — Count Using Streams  ************ ");
+
+
+Map<String,Long> complaintsCount = complaints.stream()
+                                              .collect(Collectors.groupingBy(n -> n.category(),Collectors.counting()));
+
+
+
+
+
+	  
+    
+
+complaintsCount.forEach((category,count) -> System.out.println(category + " : "  + count)); 
+
+
+
+
+
+//Question 20 — Group Complaints by Category
+
+System.out.println("**************  Question 20 — Group Complaints by Category  ************ ");
+
+Map<String,List<Complaint>> categoryComplaint =  complaints.stream()
+                                                          .collect(Collectors.groupingBy( n -> n.category()));
+														   
+
+
+
+														   
+
+
+categoryComplaint.forEach((category,list) -> {
+	
+	System.out.println(category);
+	
+	list.forEach(c -> System.out.println("  " + c.id()));
+	
+	
+});
+
+
+System.out.println("**************  Question 21 — Group Complaints by Citizen  ************ ");
+//Question 21 — Group Complaints by Citizen
+
+
+Map<String,List<Complaint>> groupComplaintsByCitizen = complaints.stream()
+                                                                 .collect(Collectors.groupingBy(n ->n.citizenId()));
+																 
+																 
+																 
+																 
+groupComplaintsByCitizen.forEach((citizen,listTwo)  ->{
+	
+	
+	
+	System.out.println(citizen);
+	listTwo.forEach(c -> System.out.println( c.category()));
+	
+	
+	
+	
+	
+	
+});
+
+System.out.println("**************  Question 22 — Project Lookup  ************ ");
+//Question 22 — Project Lookup
+
+Map<String,Project> lookup = new HashMap<>();
+
+
+/*
+List<Project> projects = List.of(
+new Project(
+"P001",
+"East Colony Road",
+"ENGINEERING",
+850000,
+"ONGOING"
+),
+
+*/
+
+Project p1 = projects.get(0);
+
+
+lookup.put("P001",p1);
+
+System.out.println(lookup.get("P001"));
+
+
+System.out.println("**************  Question 23 — Projects by Department  ************ ");
+//Question 23 — Projects by Department
+
+
+
+
+           Map<String,List<Project>>  projectsByDepartment =    projects.stream()
+			          .collect(Collectors.groupingBy(n -> n.department()));
+
+
+
+projectsByDepartment.forEach((department,list) -> {
+	
+	
+	System.out.println(department);
+	
+	
+	list.forEach(n -> System.out.println(n.name()));
+	
+	
+	
+	
+});
+
+System.out.println("**************  Question 24 — Projects by Status  ************ ");
+
+//Question 24 — Projects by Status
+
+
+Map<String,Long>  projectsbyStatus = projects.stream()
+                                             .collect(Collectors.groupingBy( n -> n.status(),Collectors.counting()));
+											 
+											
+											
+projectsbyStatus.forEach((Project,count) -> System.out.println(Project + " : " + count));
+
+
+
+
+//Question 25 — Highest-Budget Project
+System.out.println("**************  Question 25 — Highest-Budget Project  ************ ");
+
+        Project  highBudegetProject =   projects.stream()
+		           .max(Comparator.comparing(n -> n.budget()))
+				   .orElseThrow();
+				   
+				System.out.println(highBudegetProject);
+                
+
+
+
+
+//Question 26 — Projects by Budget
+System.out.println("**************  Question 26 — Projects by Budget  ************ ");
+
+Set<Project> projectsByBudget = new TreeSet<>(new HighestProjectComparator());
+
+
+
+for(Project p : projects){
+	
+	
+	projectsByBudget.add(p);
+	
+	
+}
+
+
+System.out.println(projectsByBudget);
+
+//Question 27 — Department-wise Budget
+
+System.out.println("**************  Question 27 — Department-wise Budget  ************ ");
+
+
+Map<String,Double> deptWiseBudget = projects.stream()
+                                                   .collect(Collectors.groupingBy(n -> n.department(),Collectors.summingDouble(n -> n.budget())))
+												   ;
+
+deptWiseBudget.forEach((dept, total) -> System.out.println(dept + " : " + total));
+
+
+
+//Question 28 — Sorted Project Registry
+System.out.println("**************  Question 28 — Sorted Project Registry  ************ ");
+
+
+Map<String,Project>  sortedProjectRegistry = new TreeMap<>();
+
+
+
+for(Project p : projects){
+	
+	sortedProjectRegistry.put(p.id(),p );
+	
+}
+
+
+System.out.println(sortedProjectRegistry);
+
+
+
+//Question 29 — Project Registration Order
+System.out.println("**************  Question 29 — Project Registration Order  ************ ");
+
+
+Map<String,Project> registrationOrder = new LinkedHashMap<>();
+	
+	
+	
+	for(Project p : projects){
+	
+	registrationOrder.put(p.id(),p );
+	
+}
+	
+	
+	System.out.println(registrationOrder);
+	
+	
+
+
+
+
+
+
+
+
+
+
+//close	
+}
 }
 
 
