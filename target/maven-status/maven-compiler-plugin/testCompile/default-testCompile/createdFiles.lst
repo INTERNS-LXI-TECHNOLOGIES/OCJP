@@ -1,0 +1,5 @@
+com\fintech\RiskLevelTest.class
+com\fintech\Currency.class
+com\fintech\TransactionVerifierTest.class
+com\fintech\CurrencyTest.class
+com\fintech\PaymentTest.class
