@@ -1,4 +1,5 @@
 com\fintech\RiskLevelTest.class
+com\ward\Level2QuestionsTest.class
 com\fintech\PaymentRequestTest.class
 com\ward\Level1QuestionsTest.class
 com\fintech\CurrencyTest.class

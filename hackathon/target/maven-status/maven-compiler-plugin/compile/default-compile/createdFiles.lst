@@ -10,6 +10,7 @@ com\fintech\PaymentMethod.class
 com\fintech\BankTransferMethod.class
 com\fintech\TransactionVerifier.class
 com\fintech\PaymentRequest.class
+com\ward\Level2Questions.class
 com\fintech\MediumRisk.class
 com\ward\WardGovernanceHackathon.class
 com\ward\Level1Questions.class
