@@ -8,7 +8,12 @@ public class WardGovernanceHackathon {
             String name,
             int age,
             String area
-    ) {}
+    ) {
+        @Override
+        public String toString() {
+            return "id: "+id+" name :"+name+" age :"+age+" area :"+area+"\n";
+        }
+    }
 
     record Complaint(
             String id,
@@ -37,6 +42,7 @@ public class WardGovernanceHackathon {
                 new Citizen("C006", "Lakshmi", 51, "Temple Road"),
                 new Citizen("C007", "Arun", 22, "West Colony"),
                 new Citizen("C008", "Bindu", 45, "Market Road")
+
         );
 
         List<String> visits = List.of(
@@ -118,6 +124,14 @@ public class WardGovernanceHackathon {
                 "Meena", Set.of("TEACHING", "FIRST_AID", "COUNSELLING"),
                 "Arun", Set.of("DRIVING", "ELECTRICAL", "FIRST_AID")
         );
+
+
+//1
+List<Citizen> moreCitizens=new ArrayList<>(citizens);
+moreCitizens.add(new Citizen("C009","jeni",28,"chokkath Road"));
+//moreCitizens.remove(new Citizen("C004", "Meena", 28, "East Colony"));
+moreCitizens.removeIf(c->c.id().equals("C004"));
+System.out.println(moreCitizens);
 
         // YOUR CODE
     }
