@@ -133,6 +133,26 @@ moreCitizens.add(new Citizen("C009","jeni",28,"chokkath Road"));
 moreCitizens.removeIf(c->c.id().equals("C004"));
 System.out.println(moreCitizens);
 
+
+
+
+
+//2
+
+System.out.println("first citizen :"+moreCitizens.get(0));
+System.out.println("fourth citizen :"+moreCitizens.get(3));
+
+System.out.println("first citizen :"+moreCitizens.getFirst());
+System.out.println("Last citizen :"+moreCitizens.getLast()); 
+
+
+
+//3
+
+
+
+
+
         // YOUR CODE
     }
 }
