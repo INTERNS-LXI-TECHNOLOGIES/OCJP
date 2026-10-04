@@ -1,0 +1,137 @@
+Question 30 — Choose the Collection
+
+1 Find a citizen quickly using ID  - HashMap - ID can be used as a key, so we can find the citizen quickly.
+
+2 Maintain citizens in registration order  - ArrayList - It keeps the citizens in the same order they were added.
+
+2. Store unique complaint categories -  HashSet - It does not allow duplicate categories.
+
+4. Unique categories + first-seen order - LInkedHashSet - It removes duplicates and keeps the order in which they were added.
+
+5. Unique categories + alphabetical order - TreeSet -It removes duplicates and keeps the categories sorted.
+
+6. Process complaints in arrival order - Queue - The first complaint that comes in is processed first
+
+7. Process urgent complaints by priority- PriorityQueue - It processes complaints based on their priority.
+
+8. Department → multiple projects - Map<String, List<Project>> - One department can have many projects.
+
+9. Project IDs in sorted order - TreeMap - It keeps the project IDs sorted.
+
+10. Project IDs in registration order - LinkedHashMap - It keeps the projects in the order they were added.
+
+11. Volunteer → unique skill - Map<String, Set<String>> - One volunteer can have many skills, and duplicate skills are not needed.
+
+12. Date → activities for that date - Map<Date, List<Activity>> - One date can have many activities.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A.  A citizen can submit many complaints. Given a citizen ID, the system must retrieve all of that citizen's complaints. What is the data relationship? 
+
+ans . A citizen ID is the key, and that citizen can have many complaints.
+	  Relationship: One citizen → Many complaints
+	  Map<String, List<Complaint>>
+	  
+	  
+B.  A complaint can belong to only one category, but thousands of complaints may belong to the same category. What is the data relationship? 	  
+	  
+ans. Each complaint has one category, but many complaints can have the same category.
+	 Relationship: Many complaints → One category
+	 
+	 
+C.  The ward office receives complaints continuously. Staff should process them in the same order in which they arrived. What data structure models this? 	 
+
+ans. The first complaint that comes in should be processed first.
+	FIFO = First In, First Out.
+	Queue<Complaint>
+	
+	
+D.  Emergency complaints should be processed according to severity rather than arrival time. What data structure models this? 	
+
+ans . Here priority is more important than arrival time.
+		PriorityQueue<Complaint>
+		
+		
+E.  The dashboard must show projects chronologically by their registration date. What collection property is important? 		
+
+ans. The important thing is that the projects should be sorted by date.
+		TreeMap
+		
+		
+F. The system must know whether a particular citizen ID has already been registered. What operation should be efficient? 		
+
+ans. We mainly need a quick contains() check.
+		Set<String>
+		
+		
+G.  The ward wants to know which skills are common to two groups of volunteers. What collection operation models this? 
+
+ans. Use retainAll() to find common skills.
+	
+
+H.  A citizen can participate in ten activities, but accidentally recording the same activity twice should have no effect. What collection property is required?
+
+ans.  A Set does not allow duplicates.
+		Set<String>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*****
+List  → Order is important, duplicates allowed
+
+Set   → No duplicates
+
+Map   → Key → Value
+
+Queue → First come, first served
+
+PriorityQueue → Priority comes first
+
+LinkedHash → Keep insertion order
+
+Tree → Keep sorted order

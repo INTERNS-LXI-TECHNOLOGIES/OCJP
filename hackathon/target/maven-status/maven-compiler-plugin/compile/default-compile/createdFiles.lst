@@ -16,6 +16,7 @@ com\ward\WardGovernanceHackathon.class
 com\ward\Level1Questions.class
 com\fintech\Currency.class
 com\ward\WardGovernanceHackathon$Project.class
+com\ward\Level3Questions.class
 com\fintech\ComplianceCheckable.class
 com\fintech\RiskLevel.class
 com\fintech\LowRisk.class
