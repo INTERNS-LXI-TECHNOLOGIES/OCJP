@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.*;
 import java.util.SequencedCollection;
+import java.util.stream.Collectors;
 
 public class WardGovernanceHackathon {
 
@@ -252,7 +253,146 @@ public class WardGovernanceHackathon {
 //15
         TreeSet<Citizen> citizenSet = new TreeSet<>(Comparator.comparingInt(Citizen::age).thenComparing(Citizen::name));
         citizenSet.addAll(citizens);
-        System.out.println("Citizens Ordered by Age" + citizenSet);
 
+      System.out.println("Citizens Ordered by Age" + citizenSet);
+
+
+
+    //16
+         Map<String,Citizen> mapCitizen=new HashMap<>();
+ for(Citizen c:citizens){
+     mapCitizen.put(c.id(),c);
+ }
+ System.out.println("Citizen stored in map :"+mapCitizen);
+ System.out.println("Retrieved citizen :"+mapCitizen.get("C005"));
+
+
+ //17
+       System.out.println( mapCitizen.containsKey("C007"));
+        System.out.println(  mapCitizen.containsKey("C099"));
+
+
+//18
+
+        Map<String,Integer> categoryCount=new HashMap<>();
+for(String category:complaintCategories){
+    categoryCount.merge(category,1,Integer::sum);
+}        System.out.println(categoryCount);
+
+//19
+
+Map<String,Long> count=complaintCategories.stream().collect(Collectors.groupingBy(c->c,Collectors.counting()));
+
+System.out.println("Count Using Streams     ;"+count);
+
+//20
+        Map<String,List<Complaint>> ml=new HashMap<>();
+        for(Complaint c:complaints){
+           String category= c.category();
+           ml.computeIfAbsent(category,key->new ArrayList<>())
+                   .add(c);
+
+
+        }
+
+        System.out.println("Group Complaints by Category:"+ml);
+
+
+
+        //21
+
+        Map<String, List<Complaint>> complaintsByCitizen = new HashMap<>();
+
+        for (Complaint c : complaints) {
+            complaintsByCitizen
+                    .computeIfAbsent(c.citizenId(), key -> new ArrayList<>())
+                    .add(c);
+        }
+
+        System.out.println("Complaints By Citizen :"+complaintsByCitizen);
+
+        //22
+
+        Map<String, Project> projectMap = new HashMap<>();
+
+        for (Project p : projects) {
+            projectMap.put(p.id(), p);
+        }
+
+        System.out.println("Retrieved Project: " + projectMap.get("P003"));
+
+
+
+        //23
+        Map<String, List<Project>> projectsByDepartment = new HashMap<>();
+
+        for (Project p : projects) {
+            projectsByDepartment
+                    .computeIfAbsent(p.department(), key -> new ArrayList<>())
+                    .add(p);
+        }
+
+        System.out.println("Projects By Department: " + projectsByDepartment);
+
+
+//24
+        Map<String, Long> projectsByStatus = projects.stream()
+                .collect(Collectors.groupingBy(
+                        Project::status,
+                        Collectors.counting()
+                ));
+
+
+        System.out.println("Projects By Status: " + projectsByStatus);
+
+
+  //25
+        Optional<Project> highestBudget = projects.stream()
+                .max(Comparator.comparingDouble(Project::budget));
+
+        System.out.println("Highest Budget Project: " + highestBudget.get());
+
+
+
+   //26
+        List<Project> sortedProjects = projects.stream()
+                .sorted(Comparator.comparingDouble(Project::budget))
+                .toList();
+
+        System.out.println("Projects by Budget: " + sortedProjects);
+
+
+//27
+        Map<String, Double> budgetByDepartment = projects.stream()
+                .collect(Collectors.groupingBy(
+                        Project::department,
+                        Collectors.summingDouble(Project::budget)
+                ));
+
+        System.out.println("Budget By Department: " + budgetByDepartment);
+
+//28
+        Map<String, Project> projectRegistry = new TreeMap<>();
+
+        for (Project p : projects) {
+            projectRegistry.put(p.id(), p);
+        }
+
+        System.out.println("Sorted Project Registry: " + projectRegistry);
+
+       /* Ask:
+ Which Map implementation guarantees sorted keys?
+        answer : TreeMap */
+
+        //29
+
+        Map<String, Project> projectRegistry1 = new LinkedHashMap<>();
+
+        for (Project p : projects) {
+            projectRegistry1.put(p.id(), p);
+        }
+
+        System.out.println("Project Registration Order: " + projectRegistry1);
     }
+
 }
