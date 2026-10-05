@@ -1,4 +1,5 @@
 package com.example;
+
 import java.util.*;
 import java.util.SequencedCollection;
 
@@ -12,7 +13,7 @@ public class WardGovernanceHackathon {
     ) {
         @Override
         public String toString() {
-            return "id: "+id+" name :"+name+" age :"+age+" area :"+area+"\n";
+            return "id: " + id + " name :" + name + " age :" + age + " area :" + area + "\n";
         }
     }
 
@@ -22,7 +23,8 @@ public class WardGovernanceHackathon {
             String category,
             int priority,
             String status
-    ) {}
+    ) {
+    }
 
     record Project(
             String id,
@@ -30,7 +32,8 @@ public class WardGovernanceHackathon {
             String department,
             double budget,
             String status
-    ) {}
+    ) {
+    }
 
     public static void main(String[] args) {
 
@@ -128,46 +131,41 @@ public class WardGovernanceHackathon {
 
 
 //1
-List<Citizen> moreCitizens=new ArrayList<>(citizens);
-moreCitizens.add(new Citizen("C009","jeni",28,"chokkath Road"));
+        List<Citizen> moreCitizens = new ArrayList<>(citizens);
+        moreCitizens.add(new Citizen("C009", "jeni", 28, "chokkath Road"));
 //moreCitizens.remove(new Citizen("C004", "Meena", 28, "East Colony"));
-moreCitizens.removeIf(c->c.id().equals("C004"));
-System.out.println(moreCitizens);
-
-
-
+        moreCitizens.removeIf(c -> c.id().equals("C004"));
+        System.out.println(moreCitizens);
 
 
 //2
 
-System.out.println("1st citizen using get index :"+moreCitizens.get(0));
-System.out.println("4th citizen :"+moreCitizens.get(3));
+        System.out.println("1st citizen using get index :" + moreCitizens.get(0));
+        System.out.println("4th citizen :" + moreCitizens.get(3));
 
-System.out.println("1st citizen :"+moreCitizens.getFirst());
-System.out.println("Last citizen :"+moreCitizens.getLast()); 
-
+        System.out.println("1st citizen :" + moreCitizens.getFirst());
+        System.out.println("Last citizen :" + moreCitizens.getLast());
 
 
 //3
-SequencedCollection<String> v=new ArrayList<>(visits);
-v.addFirst("Flooding Inspection");
-v.addLast("Market sanitation inspection ");
+        SequencedCollection<String> v = new ArrayList<>(visits);
+        v.addFirst("Flooding Inspection");
+        v.addLast("Market sanitation inspection ");
 
-System.out.println(""+v);
-
+        System.out.println("" + v);
 
 
 //4
 
-System.out.println("reversed list : "+v.reversed());
+        System.out.println("reversed list : " + v.reversed());
 
 //5
-        v.removeIf(d->d.toLowerCase().contains("inspection"));
-        System.out.println("Removed Inspection :"+v);
+        v.removeIf(d -> d.toLowerCase().contains("inspection"));
+        System.out.println("Removed Inspection :" + v);
 
 //6
-List<Citizen> result =citizens.stream().filter(e->e.area().contains("East Colony")).toList();
-        System.out.println("EAST COLONY :"+result);
+        List<Citizen> result = citizens.stream().filter(e -> e.area().contains("East Colony")).toList();
+        System.out.println("EAST COLONY :" + result);
 
         //7
 
@@ -179,9 +177,82 @@ List<Citizen> result =citizens.stream().filter(e->e.area().contains("East Colony
          Since new citizens are usually added at the end, ArrayList is also efficient for append operations.
          LinkedList has O(n) index-based access, so it is less suitable for this use case.*/
 
+// LEVEL 2 QUESTIONS(SET)
+
+        //8
+        Set<String> setCategories = new HashSet<>(complaintCategories);
+        System.out.println("Unique Complaint Categories: " + setCategories);
 
 
+        //9
+        Set<String> linkedSet = new LinkedHashSet<>(complaintCategories);
+        System.out.println(" Unique Categories in First-Seen Order :" + linkedSet);
 
+
+        //10
+        SortedSet<String> treeSet = new TreeSet<>(linkedSet);
+        System.out.println("Sorted Complaint Categories  :" + treeSet);
+
+
+        //11
+
+        List<String> complaintIds = List.of(
+                "CMP001",
+                "CMP002",
+                "CMP003",
+                "CMP001",
+                "CMP004",
+                "CMP002",
+                "CMP005"
+        );
+        Set<String> seen = new HashSet<>();
+        Set<String> duplicates = new HashSet<>();
+
+        for (String id : complaintIds) {
+
+            if (!seen.add(id)) {
+                duplicates.add(id);
+            }
+        }
+        System.out.println("Duplicate Complaint IDs :" + duplicates);
+
+
+//12
+        Set<String> ravi = volunteerSkills.get("Ravi");
+        Set<String> arun = volunteerSkills.get("Arun");
+        Set<String> mutableSet = new HashSet<>(ravi);
+        mutableSet.retainAll(arun);
+
+        System.out.println("Common Skill :" + mutableSet);
+
+//13
+
+        Set<String> ravi1 = volunteerSkills.get("Ravi");
+        Set<String> suresh = volunteerSkills.get("Suresh");
+
+        Set<String> uniqueSkill = new HashSet<>(ravi1);
+        uniqueSkill.removeAll(suresh);
+
+        System.out.println("Skills Unique to Ravi :" + uniqueSkill);
+
+//14
+
+
+        for (Map.Entry<String, Set<String>> s : volunteerSkills.entrySet()) {
+            String setkey = s.getKey();
+            Set<String> skill = s.getValue();
+
+            if (skill.contains("FIRST_AID")) {
+                System.out.println("Volunteers With First Aid : " + setkey);
+            }
+
+
+        }
+
+//15
+        TreeSet<Citizen> citizenSet = new TreeSet<>(Comparator.comparingInt(Citizen::age).thenComparing(Citizen::name));
+        citizenSet.addAll(citizens);
+        System.out.println("Citizens Ordered by Age" + citizenSet);
 
     }
 }
