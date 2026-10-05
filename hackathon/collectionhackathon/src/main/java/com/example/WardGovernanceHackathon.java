@@ -1,5 +1,6 @@
 package com.example;
 import java.util.*;
+import java.util.SequencedCollection;
 
 public class WardGovernanceHackathon {
 
@@ -139,20 +140,48 @@ System.out.println(moreCitizens);
 
 //2
 
-System.out.println("first citizen :"+moreCitizens.get(0));
-System.out.println("fourth citizen :"+moreCitizens.get(3));
+System.out.println("1st citizen using get index :"+moreCitizens.get(0));
+System.out.println("4th citizen :"+moreCitizens.get(3));
 
-System.out.println("first citizen :"+moreCitizens.getFirst());
+System.out.println("1st citizen :"+moreCitizens.getFirst());
 System.out.println("Last citizen :"+moreCitizens.getLast()); 
 
 
 
 //3
+SequencedCollection<String> v=new ArrayList<>(visits);
+v.addFirst("Flooding Inspection");
+v.addLast("Market sanitation inspection ");
+
+System.out.println(""+v);
+
+
+
+//4
+
+System.out.println("reversed list : "+v.reversed());
+
+//5
+        v.removeIf(d->d.toLowerCase().contains("inspection"));
+        System.out.println("Removed Inspection :"+v);
+
+//6
+List<Citizen> result =citizens.stream().filter(e->e.area().contains("East Colony")).toList();
+        System.out.println("EAST COLONY :"+result);
+
+        //7
+
+        ArrayList<Citizen> arrayList = new ArrayList<>();
+        LinkedList<Citizen> linkedList = new LinkedList<>();
+
+         /*I would choose ArrayList because the application frequently accesses citizens by index,
+        and ArrayList provides efficient random access with O(1) time complexity.
+         Since new citizens are usually added at the end, ArrayList is also efficient for append operations.
+         LinkedList has O(n) index-based access, so it is less suitable for this use case.*/
 
 
 
 
 
-        // YOUR CODE
     }
 }
