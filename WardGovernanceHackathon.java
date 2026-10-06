@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class WardGovernanceHackathon {
 
@@ -148,25 +149,116 @@ public class WardGovernanceHackathon {
                         citizenLook.put(citizenss.id(), citizen);
                 }
 
-                Citizen citizzen = citizenLook.get("C005")
+                Citizen citizzen = citizenLook.get("C005");
 
-                //17 
+                // 17
                 System.out.println(citizenLook.containsKey("C007"));
-                                System.out.println(citizenLook.containsKey("C099"));
+                System.out.println(citizenLook.containsKey("C099"));
 
-                                //18
-                                Map<String, Integer> complaintCount = new HashMap<>();
-                                for(Complaint complaint : complaints ){
-                                        complaintCount.merge(complaint.category()),
+                // 18
+                Map<String, Integer> complaintCount = new HashMap<>();
+                for (Complaint complaint : complaints) {
+                        complaintCount.merge(complaint.category(),
                                         1,
-                                        Integer::sum
-                                };
-
-                                System.out.println(complaintCount);
-
-
+                                        Integer::sum);
                 }
 
-}
+                System.out.println(complaintCount);
+                // 19
+
+
+                Map<String,Long> complaintNum = complaints.stream()
+                .collect(
+                        collectors.groupingBy(
+                                complaint:: category,
+                                collectors.counting()
+                        )
+                );
+
+                //20
+                Map<String, List<Complaint>> absent = new HashMap<>();
+                for(Complaint c : complaints){
+                        absent.comnputeIfAbsent(
+                               c.category(), k -> new ArrayList<>()).add(c);
+                
+        
+                }
+                //21
+                Map<String, List<Complaint>> idd = new HashMap<>();
+                for(Complaint id : complaints){
+                        idd.computeIfAbsent(id.id(), i -> new ArrayList<>()).add(id);
+                } 
+
+
+                //22
+
+                Map<String, Project> lookUp = new HashMap<>();
+
+                for(Project p : projects){
+                        lookUp.put(
+                                p.id(),
+                                p
+                        );
+
+                        lookUp.get("P003");
+                }
+
+                //23
+
+                Map<String, List<Project>> p = new HashMap<>();
+                for(Project pj : projects){
+                        p.computeIfAbsent(pj.department(), k -> new ArrayList<>().add(pj));
+                }
+
+                //24
+
+                Map<String, Long> projectCount = projects.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                Project :: status,
+                                collectors.counting()
+                        )
+                );
+
+                //25
+              Optional<Double> max = projects.stream().max(
+              Comparator. comparingDouble(Project:: budget));
+
+              //26
+
+              Double d= projects.stream()
+              .sorted(Comparator.comparingDouble(Project:: budget));
+
+
+              //27
+
+              Map<String, Double> departmentBudget = new HashMap<>();
+              collect(
+                Collectores.groupingBy(
+                        Project:: department,
+                        Collectors.summingDouble(project:: budget)
+                )
+              );
+
+
+              //28
+
+              Map<Strng, project> map = new TreeMap<>();
+
+              //29
+                 Map<Strng, project> maps = new LinkedHashMap<>();
+
+                for (Project pr : projects) {
+                projectMap.put(p.id(), p);
+                }
+
+                
+
+                //30
+
+                
+
+            
+        }
 
 }
