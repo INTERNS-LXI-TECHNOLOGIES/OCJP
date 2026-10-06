@@ -67,6 +67,24 @@ public class CitizenRegistry{
 		  
 		  citizens.forEach(citizen-> System.out.println(citizen.name()));	
 		 
+		 System.out.println("--------------------------------------------------------------------");
+		 
+		 Map <String,String> citizens1 = new HashMap<>();
+		 citizens1.put("C001","Citizen Ravi");
+		 citizens1.put("C002","Citizen Anitha");
+		 citizens1.put("C003","Citizen Suresh");
+		 citizens1.put("C004","Citizen Meena");
+		 citizens1.put("C005","Citizen Joseph");
+		 citizens1.put("C006","Citizen Lakshmi");
+		 citizens1.put("C007","Citizen Arun");
+		 citizens1.put("C008","Citizen Bindu");
+		 
+		 System.out.println(citizens1.get("C005"));
+		 
+		 System.out.println("--------------------------------------------------------------------");
+		 
+		 System.out.println(citizens1.containsKey("C007"));
+		 System.out.println(citizens1.containsKey("C099"));
 	}
 
 }

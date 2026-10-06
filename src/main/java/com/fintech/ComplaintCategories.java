@@ -1,6 +1,6 @@
 package com.fintech;
 import java.util.*;
-
+import java.util.stream.Collectors;
 
 public class ComplaintCategories{
 	public static void main (String [] args){
@@ -107,6 +107,58 @@ public class ComplaintCategories{
 			  }
 		  }
 		  
+		  System.out.println("--------------------------------------------------------------------");
+		    List<String> complaintCategories4 = List.of( 
+                "Road", 
+                "Water", 
+                "Road", 
+                "Streetlight", 
+                "Water", 
+                "Waste", 
+                "Road", 
+                "Streetlight", 
+                "Waste", 
+                "Water" 
+        ); 
+		  Map<String,Integer> categories = new HashMap<>();
 		  
+		  for(String complaintCategory : complaintCategories4){
+			  categories.merge(complaintCategory,1,Integer::sum);
+		  }
+		  
+		  System.out.println(categories);
+		  
+		  System.out.println("--------------------------------------------------------------------");
+		  
+		  Map<String,Long> complaints1 = complaintCategories4.stream()
+		  .collect(Collectors.groupingBy(complaintcategory -> complaintcategory,Collectors.counting()));
+		  
+		  System.out.println(complaints1);
+		  
+		  
+		  System.out.println("--------------------------------------------------------------------");
+		  
+		   List<WardGovernanceHackathon.Complaint> complaints = new ArrayList<>(List.of( 
+                new WardGovernanceHackathon.Complaint("CMP001", "C001", "Road", 2, "OPEN"), 
+                new WardGovernanceHackathon.Complaint("CMP002", "C003", "Water", 1, "OPEN"), 
+                new WardGovernanceHackathon.Complaint("CMP003", "C002", "Road", 3, "RESOLVED"), 
+                new WardGovernanceHackathon.Complaint("CMP004", "C007", "Streetlight", 2, "OPEN"), 
+                new WardGovernanceHackathon.Complaint("CMP005", "C004", "Waste", 3, "OPEN"), 
+                new WardGovernanceHackathon.Complaint("CMP006", "C005", "Water", 1, "RESOLVED"), 
+                new WardGovernanceHackathon.Complaint("CMP007", "C001", "Road", 1, "OPEN"), 
+                new WardGovernanceHackathon.Complaint("CMP008", "C008", "Streetlight", 3, "RESOLVED"), 
+                new WardGovernanceHackathon.Complaint("CMP009", "C006", "Waste", 2, "OPEN"), 
+                new WardGovernanceHackathon.Complaint("CMP010", "C003", "Water", 3, "OPEN") )); 
+				
+			Map<String,List<String>> complaintsByCategories = new HashMap<>();
+			
+			for(WardGovernanceHackathon.Complaint complaint : complaints){
+				complaintsByCategories.computeIfAbsent(complaint.category(),key -> new ArrayList<>())
+				.add(complaint.id());
+			}
+				
+				System.out.println(complaintsByCategories);
+				
+					
 	}
-}
+} 
