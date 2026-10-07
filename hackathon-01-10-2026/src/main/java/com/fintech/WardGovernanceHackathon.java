@@ -1,7 +1,61 @@
 package com.fintech;
+
 import java.util.*;
 import java.util.stream.*;
 public class WardGovernanceHackathon {
+	
+	
+	
+// enum 
+
+
+public enum AgeGroup{
+	
+	
+	CHILD(0,17),YOUTH(18,35),ADULT(36,55),SENIOR(56,100);
+	
+	
+	 private final int min;
+     private final int max;
+	
+	
+	
+	AgeGroup(int min, int max){
+		
+		this.min = min;
+		this.max = max;
+		
+	}
+	
+public int getMin(){
+	
+	return min;
+	
+}
+public int geMax(){
+	
+	return max;
+	
+}
+
+public static  AgeGroup fromAge(int age){
+	
+	if(age < 18)return CHILD;
+	if(age <= 35) return YOUTH;
+	if(age <= 55) return ADULT;
+	
+	
+	return SENIOR;
+		
+	
+	
+	
+}
+
+
+
+	
+}	
 	
 	
 	
@@ -9,11 +63,19 @@ record Citizen  (
 String id,
 String name,
 int age,
-String area
+String area,
+AgeGroup ageGroup
+
 ) {
 	
 	
+	public Citizen(String id, String name, int age, String area) {
+        this(id, name, age, area, AgeGroup.fromAge(age));
+	
+	
 }
+}
+
 record Complaint(
 String id,
 String citizenId,
@@ -26,10 +88,6 @@ String status
 	}
 	
 	
-
-
-
-
 record Project(
 String id,
 String name,
@@ -52,6 +110,9 @@ String status
 	
 	
 }
+
+
+
 
 // my class 
 public static class AgeComparator implements Comparator<Citizen>{
@@ -93,10 +154,59 @@ public static class HighestProjectComparator implements Comparator<Project>{
 
 
 
+// my class 
+
+public static class AreaPopulationOrder implements Comparator<Map.Entry<String, Long>> {
+
+    @Override
+    public int compare(Map.Entry<String, Long> one, Map.Entry<String, Long> two) {
+       
+        int countCompare = two.getValue().compareTo(one.getValue());
+
+        if (countCompare != 0) {
+            return countCompare;
+        }
+
+        return one.getKey().compareTo(two.getKey());
+    }
+}
+	
+
+// my class 
+/*
+public static  class AgeByOrdering implements Comparator<Citizen>{
+
+
+public int compare(Citizen one,Citizen two){
+	
+
+	
+	
+	
+	
+}
+
+*/
+
+
+
+
+	
+	
+
+
+
+
+
+
+
 public static void main(String[] args) {
 	
-	
+	                 
 List<Citizen> citizens = List.of(
+new Citizen("C010", "Aarav", 10, "East Colony"),
+new Citizen("C011", "Ananya", 15, "West Colony"),
+new Citizen("C012", "Diya", 7, "Temple Road"),
 new Citizen("C001", "Ravi", 42, "East Colony"),
 new Citizen("C001", "Ravi", 42, "East Colony"),
 new Citizen("C002", "Anitha", 35, "West Colony"),
@@ -105,10 +215,13 @@ new Citizen("C004", "Meena", 28, "East Colony"),
 new Citizen("C005", "Joseph", 74, "Market Road"),
 new Citizen("C006", "Lakshmi", 51, "Temple Road"),
 new Citizen("C007", "Arun", 22, "West Colony"),
-new Citizen("C008", "Bindu", 45, "Market Road")
+new Citizen("C008", "Bindu", 45, "Market Road"),
+new Citizen("C009", "Thomas", 39, "East Colony"),
+new Citizen("C010", "Leela", 63, "Temple Road"),
+new Citizen("C011", "George", 31, "West Colony"),
+new Citizen("C012", "Devika", 58, "Market Road")
+
 );
-
-
 
 
 List<String> visits = new ArrayList<>(List.of("Road inspection",
@@ -118,8 +231,8 @@ List<String> visits = new ArrayList<>(List.of("Road inspection",
 "Health centre visit"));
 
 
-
 List<String> complaintCategories = List.of(
+
 "Road",
 "Water",
 "Road",
@@ -267,7 +380,6 @@ visits.removeIf(n -> n.toLowerCase().contains("inspection"));
 		 
 		 System.out.println(visits);
 
-   
    
    
    //Question 6 — Citizens of an Area
@@ -467,10 +579,6 @@ System.out.println("Skills unique to Ravi: " + raviUniqueSkills );
     Citizen cc4 = citizens.get(3);		
 		 
 		 
-		 
-		
-	
-	
 	accesByIdKey.put("c001",cc1);
 	accesByIdKey.put("c002",cc2);
 	accesByIdKey.put("c003",cc3);
@@ -501,18 +609,8 @@ System.out.println("**************  Question 18 — Count Complaints by Category
 
 
 for(Complaint c : complaints){
-	
-	
-	
-	
-	
-	
+		
 }
-
-
-
-
-
 
 //Question 19 — Count Using Streams
 
@@ -578,8 +676,7 @@ groupComplaintsByCitizen.forEach((citizen,listTwo)  ->{
 	
 	
 	
-	
-	
+
 });
 
 System.out.println("**************  Question 22 — Project Lookup  ************ ");
@@ -616,7 +713,6 @@ System.out.println("**************  Question 23 — Projects by Department  ****
 
            Map<String,List<Project>>  projectsByDepartment =    projects.stream()
 			          .collect(Collectors.groupingBy(n -> n.department()));
-
 
 
 projectsByDepartment.forEach((department,list) -> {
@@ -728,18 +824,97 @@ Map<String,Project> registrationOrder = new LinkedHashMap<>();
 	System.out.println(registrationOrder);
 	
 	
+	
+	//HACKATHON 2 
+	
+	System.out.println("$$$$$$$$$$   HACKATHON 2   $$$$$$$$$$$ ");
+	
+	
+	
+		System.out.println("$$$$$$$$$$ QUESTION 1 — Citizen Index   $$$$$$$$$$$ ");
+	
+	//QUESTION 1 — Citizen Index
+	
+	Map<String,Citizen> frequentlyReceives = new HashMap<>();
+	
+	for(Citizen c : citizens){
+		
+		
+		frequentlyReceives.put(c.id,c);
+		
+		
+	}
+	
+	
+	Citizen data  = frequentlyReceives.get("C008");
+	
+	
+	System.out.println(data);
+	
+	
+		//QUESTION 2 — Citizens by Area
+	
+		System.out.println("$$$$$$$$$$ QUESTION 2 — Citizens by Area   $$$$$$$$$$$ ");
+	
+        Map<String,List<Citizen>> wardBase =   citizens.stream()
+		
+		                                   .collect(Collectors.groupingBy(n -> n.area()));
+	  
+	  
+	  
+	  wardBase.forEach((area , citicens)  ->{
+		  
+		  
+		  System.out.println("Area : " + area);
+		  
+		  citicens.forEach( n -> System.out.println(n.name()));
+		  
+		  
+		  
+		  
+	  });
+	  
+	  
+	  
+	  //QUESTION 3 — Area Population Ranking
+	  System.out.println("$$$$$$$$$$ QUESTION 3 — Area Population Ranking   $$$$$$$$$$$ ");
+	  
+	  
+
+	  
+      	   Map<String,Long> areaBase = citizens.stream()
+		
+		                                       .collect(Collectors.groupingBy(n -> n.area(),Collectors.counting()));
+	                                      
 
 
+	    
+
+	  areaBase.entrySet().stream()
+        .sorted(new AreaPopulationOrder())
+        .forEach(entry -> System.out.println("Area : " + entry.getKey() + " : " + entry.getValue()));
+	  
+	  
+	 
+      //QUESTION 4 — Citizen Age Groups
+	 	  System.out.println("$$$$$$$$$$ QUESTION 4 — Citizen Age Groups   $$$$$$$$$$$ ");
 
 
+         Map<AgeGroup,List<Citizen>>  ageBySort = new TreeMap<>();
 
-
-
-
-
-
+           
+             ageBySort = citizens.stream()
+			           .collect(Collectors.groupingBy(n -> AgeGroup.fromAge(n.age()))); 
+			   
+			   
+			   
+	System.out.println(ageBySort.get(AgeGroup.CHILD));
+	
+	
+	
 //close	
 }
 }
+
 
 

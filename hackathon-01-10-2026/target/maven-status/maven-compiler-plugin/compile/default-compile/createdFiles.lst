@@ -11,11 +11,13 @@ com\fintech\LowLevel.class
 com\fintech\TransactionVerifier.class
 com\fintech\PaymentRequest.class
 com\fintech\WardGovernanceHackathon$Citizen.class
+com\fintech\WardGovernanceHackathon$AreaPopulationOrder.class
 com\fintech\WardGovernanceHackathon.class
 com\fintech\WardGovernanceHackathon$Complaint.class
 com\fintech\HighLevel.class
 com\fintech\Currency.class
 com\fintech\PaymentProcesser.class
 com\fintech\WardGovernanceHackathon$HighestProjectComparator.class
+com\fintech\WardGovernanceHackathon$AgeGroup.class
 com\fintech\RazerPay.class
 com\fintech\RiskLevel.class
