@@ -6,14 +6,11 @@ public class WardGovernanceHackathon {
 	
 	
 	
-// enum 
-
-
+// enum  1
 public enum AgeGroup{
 	
 	
 	CHILD(0,17),YOUTH(18,35),ADULT(36,55),SENIOR(56,100);
-	
 	
 	 private final int min;
      private final int max;
@@ -57,7 +54,7 @@ public static  AgeGroup fromAge(int age){
 	
 }	
 	
-	
+		
 	
 record Citizen  (
 String id,
@@ -83,6 +80,8 @@ String category,
 int priority,
 String status
 ) {
+	
+
 	
 	
 	}
@@ -137,10 +136,7 @@ public static class HighestProjectComparator implements Comparator<Project>{
 	@Override
 	public int compare(Project one,Project two){
 		
-		
 		return Double.compare(one.budget,two.budget);
-		
-		
 		
 		
 	}
@@ -189,7 +185,20 @@ public int compare(Citizen one,Citizen two){
 */
 
 
-
+public static class PriortyComparator implements Comparator<Complaint>{
+	
+	
+	
+	@Override
+	public int compare(Complaint one,Complaint two){
+		
+		return Integer.compare(one.priority(),two.priority());
+		
+	}
+	
+	
+	
+}
 
 	
 	
@@ -244,6 +253,8 @@ List<String> complaintCategories = List.of(
 "Waste",
 "Water"
 );
+
+
 List<Complaint> complaints = List.of(
 new Complaint("CMP001", "C001", "Road", 2, "OPEN"),
 new Complaint("CMP002", "C003", "Water", 1, "OPEN"),
@@ -675,7 +686,6 @@ groupComplaintsByCitizen.forEach((citizen,listTwo)  ->{
 	
 	
 	
-	
 
 });
 
@@ -912,9 +922,122 @@ Map<String,Project> registrationOrder = new LinkedHashMap<>();
 	
 	
 	
-//close	
+	//QUESTION 5 — Complaint Index by Citizen
+	 	  System.out.println("$$$$$$$$$$  QUESTION 5 — Complaint Index by Citizen  $$$$$$$$$$$ ");
+	      
+		
+		 System.out.println(getAllComplaints(complaints,"C001"));
+
+
+
+
+
+
+
+//QUESTION 6 — Open Complaint Work Queue
+System.out.println("$$$$$$$$$$  QUESTION 6 — Open Complaint Work Queue  $$$$$$$$$$$ ");
+
+
+
+
+	      
+
+ 
+Queue<Complaint> processingQueue = complaints.stream()
+        .filter(n -> "OPEN".equals(n.status()) )
+        .collect(Collectors.toCollection(() -> new PriorityQueue<>(new PriortyComparator())));
+
+
+
+while (!processingQueue.isEmpty()) {
+    Complaint nextComplaint = processingQueue.poll();
+    System.out.println(nextComplaint);
 }
+
+
+
+System.out.println("$$$$$$$$$$  QUESTION 7 — Highest Priority Complaint  $$$$$$$$$$$ ");
+//QUESTION 7 — Highest Priority Complaint
+System.out.println(processingQueue.peek());
+
+
+
+//QUESTION 8 — Complaint Category × Status
+
+/*
+
+new Complaint("CMP001", "C001", "Road", 2, "OPEN"),
+
+
+record Complaint(
+String id,
+String citizenId,
+String category,
+int priority,
+String status
+) {
+	
+
+	
+	
+	}
+*/
+
+System.out.println("$$$$$$$$$$  QUESTION 8 — Complaint Category × Status  $$$$$$$$$$$ ");
+
+
+Map<String,Map<String,Long>> status = complaints.stream()
+                                                 .collect(Collectors.groupingBy(n -> n.category(),Collectors.groupingBy(n -> n.status(),Collectors.counting())));
+
+
+long totalResolved = status.get("Water").get("RESOLVED");
+
+long totalOpened = status.get("Water").get("OPEN");
+
+		System.out.println("totalResolved : " + totalResolved);
+		System.out.println("totalOpened : " +totalOpened);
+long totalComplaints = totalResolved + totalOpened;
+
+double percentage = (totalComplaints == 0) 
+    ? 0.0 
+    : ((double) totalResolved / totalComplaints) * 100;
+
+System.out.println("Percentage Of Resolved % " + percentage);
+
+//close	 main method 
+
+
 }
+
+
+		
+       public static List<Complaint> getAllComplaints(List<Complaint> complaints,String citizenId){
+	
+			 
+   Map<String,List<Complaint>>   onePersonComplaint = complaints.stream()
+                                         .collect(Collectors.groupingBy(n -> n.citizenId()));
+
+    		 
+			onePersonComplaint.computeIfAbsent(citizenId , k -> new ArrayList());
+			
+			
+		
+		    return  onePersonComplaint.get(citizenId);	
+		
+ 
+		 }
+
+
+
+
+
+
+
+
+
+
+
+} // main class close 
 
 
 

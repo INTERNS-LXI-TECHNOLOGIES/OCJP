@@ -2,6 +2,7 @@ com\fintech\WardGovernanceHackathon$Project.class
 com\fintech\MediumLevel.class
 com\fintech\CreditCardMethod.class
 com\fintech\ThirdPartyGatewayMethod.class
+com\fintech\WardGovernanceHackathon$PriortyComparator.class
 com\fintech\Auditable.class
 com\fintech\PaymentMethod.class
 com\fintech\WardGovernanceHackathon$AgeComparator.class
