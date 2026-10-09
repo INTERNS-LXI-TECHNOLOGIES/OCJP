@@ -291,6 +291,14 @@ new Project(
 275000,
 "ONGOING"
 ),
+
+new Project(
+"P006",
+"Streetlight Upgrade pathiripala",
+"ELECTRICITY",
+10000,
+"ONGOING"),
+
 new Project(
 "P004",
 "School Toilet",
@@ -987,7 +995,12 @@ System.out.println("$$$$$$$$$$  QUESTION 8 — Complaint Category × Status  $$$
 
 
 Map<String,Map<String,Long>> status = complaints.stream()
-                                                 .collect(Collectors.groupingBy(n -> n.category(),Collectors.groupingBy(n -> n.status(),Collectors.counting())));
+                                                 .collect(Collectors.groupingBy(n -> n.category(),Collectors.groupingBy(n -> n.status(),  Collectors.counting())));
+
+
+
+// QUESTION 9 — Complaint Resolution Rate
+System.out.println("$$$$$$$$$$ QUESTION 9 — Complaint Resolution Rate  $$$$$$$$$$$ ");
 
 
 long totalResolved = status.get("Water").get("RESOLVED");
@@ -998,20 +1011,125 @@ long totalOpened = status.get("Water").get("OPEN");
 		System.out.println("totalOpened : " +totalOpened);
 long totalComplaints = totalResolved + totalOpened;
 
-double percentage = (totalComplaints == 0) 
-    ? 0.0 
-    : ((double) totalResolved / totalComplaints) * 100;
+double percentage = (totalComplaints == 0) ? 0.0  : ((double) totalResolved / totalComplaints) * 100;
 
 System.out.println("Percentage Of Resolved % " + percentage);
 
-//close	 main method 
 
 
+//QUESTION 10 — Categories Requiring Attention
+System.out.println("$$$$$$$$$$ QUESTION 10 — Categories Requiring Attention  $$$$$$$$$$$ ");
+
+
+
+for(Map.Entry<String,Map<String ,Long>>  outerMap : status.entrySet()){
+	
+	
+Map<String ,Long>  innerMap = outerMap.getValue();
+
+
+long open = innerMap.getOrDefault("OPEN", 0L);
+
+    if (open >= 2) {
+        
+        System.out.println(outerMap.getKey());
+    }
+	
+	
 }
+
+//QUESTION 11 — Unique Categories in Encounter Order
+
+System.out.println("$$$$$$$$$$ QUESTION 11 — Unique Categories in Encounter Order  $$$$$$$$$$$ ");
+
+
+Map<String,Complaint> uniquesCategory = new LinkedHashMap();
+
+
+
+   for(Complaint c : complaints){
+	   
+	   
+	   uniquesCategory.put(c.id(),c);
+	   
+	   
+	   System.out.println(uniquesCategory);
+	   
+	   
+   }   
+//QUESTION 12 — Project IndexQUESTION 12 — Project Index
+System.out.println("$$$$$$$$$$  QUESTION 12 — Project Index  $$$$$$$$$$$ ");
+ 
+      System.out.println(giveMeProject(projects,"P005"));
+
+
+
+//QUESTION 13 — Projects by Department
+System.out.println("$$$$$$$$$$  QUESTION 13 — Projects by Department  $$$$$$$$$$$ ");
+
+
+
+
+Map<String,List<Project>> projectsbyDepartment = projects.stream()
+					                                     .collect(Collectors.groupingBy(n -> n.department()));
+
+
+
+projectsByDepartment.get("ELECTRICITY")
+                     .forEach(p -> System.out.println(p.department() + " = " + p.id() + " : " + p.name()));
+
+
+
+
+
+//QUESTION 14 — Department Budget
+System.out.println("$$$$$$$$$$  QUESTION 14 — Department Budget  $$$$$$$$$$$ ");
+/*
+record Project(
+String id,
+String name,
+String department,
+double budget,
+String status
+*/
+
+//
+Map<String,Double> projectsbyDepartmentCalculate  =  projects.stream()
+					                                     .collect(Collectors.groupingBy(n -> n.department(),
+														 Collectors.summingDouble(n -> n.budget())));
+
+
+
+System.out.println(projectsbyDepartmentCalculate);
+
+
+
+
+
+//QUESTION 15 — Largest Project per Department
+System.out.println("$$$$$$$$$$  QUESTION 15 — Largest Project per Department  $$$$$$$$$$$ ");
+
+Map<String,Optional<Project>> largestProjectperDepartment = projects.stream()
+        .collect(Collectors.groupingBy(n -> n.department(),Collectors.maxBy(Comparator.comparing(n ->n.budget))));
+
+
+largestProjectperDepartment.forEach((dept, optionalProject) -> {
+    optionalProject.ifPresent(p -> 
+        System.out.println(dept + " | " + p.id() + " : " + p.name() + " (Budget: " + p.budget() + ")")
+    );
+});
+	
+	
+
+
+
+
+
+}//close main method 
 
 
 		
-       public static List<Complaint> getAllComplaints(List<Complaint> complaints,String citizenId){
+   public static List<Complaint> getAllComplaints(List<Complaint> complaints,String citizenId){
 	
 			 
    Map<String,List<Complaint>>   onePersonComplaint = complaints.stream()
@@ -1020,11 +1138,8 @@ System.out.println("Percentage Of Resolved % " + percentage);
     		 
 			onePersonComplaint.computeIfAbsent(citizenId , k -> new ArrayList());
 			
-			
-		
 		    return  onePersonComplaint.get(citizenId);	
 		
- 
 		 }
 
 
@@ -1032,6 +1147,28 @@ System.out.println("Percentage Of Resolved % " + percentage);
 
 
 
+public static Project giveMeProject(List<Project> projects,String projectId){
+	
+	
+	Map<String,Project>  companyProjects = new HashMap<>();
+	
+	
+	
+	for(Project p : projects){
+		
+		
+		
+		companyProjects.put(p.id(),p);
+		
+		
+		
+	}
+	
+	
+	return companyProjects.get(projectId);
+	
+	
+}
 
 
 
