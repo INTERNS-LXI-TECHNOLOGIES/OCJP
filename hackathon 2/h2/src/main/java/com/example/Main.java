@@ -34,6 +34,7 @@ public class Main {
                 LocalDate startDate
         ) {}
 
+
         record Activity(
                 LocalDate date,
                 String type,
@@ -54,6 +55,56 @@ public class Main {
                 new Citizen("C011", "George", 31, "West Colony"),
                 new Citizen("C012", "Devika", 58, "Market Road")
         );
+        List<String> complaintCategories = List.of(
+                "Road",
+                "Water",
+                "Road",
+                "Streetlight",
+                "Water",
+                "Waste",
+                "Road",
+                "Streetlight",
+                "Waste",
+                "Water"
+        );
+
+
+
+
+        //1
+
+        Map<String,Citizen> mapcitizen=citizens.stream().collect(Collectors.toMap(Citizen::id,c->c));
+System.out.println("Citizen Index: "+mapcitizen.get("C008"));
+
+//2
+        Map<String,List<Citizen>> area=citizens.stream().collect(Collectors.groupingBy(c->c.area()));
+        System.out.println("Citizens by Area : "+area);
+
+//3
+
+      Map<String ,Long> population=  citizens.stream().collect(Collectors.groupingBy(Citizen::area,Collectors.counting()));
+        System.out.println("Calculate population by area. : "+population);
+
+ //4
+        Map<String,List<Citizen>> byage=citizens.stream().collect(Collectors.groupingBy(a->{
+            if(a.age()<18)
+                return "CHILD";
+            else if(a.age()>=18 && a.age()<=35)
+                return "YOUTH";
+            else if(a.age()>=36 && a.age()<=59)
+                return "ADULT";
+            else
+                return "SENIOR";
+        }));
+        System.out.println("YOUTH : "+byage.get("YOUTH"));
+        System.out.println("ADULT : "+byage.get("ADULT"));
+        System.out.println("SENIOR : "+byage.get("SENIOR"));
+
+
+ //5
+
+
+
 
     }
 }
