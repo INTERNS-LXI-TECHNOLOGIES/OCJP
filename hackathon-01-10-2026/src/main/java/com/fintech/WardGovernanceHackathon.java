@@ -2,6 +2,7 @@ package com.fintech;
 
 import java.util.*;
 import java.util.stream.*;
+import java.time.LocalDate;
 public class WardGovernanceHackathon {
 	
 	
@@ -92,7 +93,8 @@ String id,
 String name,
 String department,
 double budget,
-String status
+String status,
+LocalDate startDate
 )implements Comparable<Project> {
 	
 	
@@ -269,51 +271,58 @@ new Complaint("CMP010", "C003", "Water", 3, "OPEN"),
 new Complaint("CMP010", "C003", "Water", 3, "OPEN"),
 new Complaint("CMP010", "C003", "Water", 3, "OPEN")
 );
+
 List<Project> projects = List.of(
-new Project(
-"P001",
-"East Colony Road",
-"ENGINEERING",
-850000,
-"ONGOING"
-),
-new Project(
-"P002",
-"Water Tank Renovation",
-"WATER",
-450000,
-"COMPLETED"
-),
-new Project(
-"P003",
-"Streetlight Upgrade",
-"ELECTRICITY",
-275000,
-"ONGOING"
-),
-
-new Project(
-"P006",
-"Streetlight Upgrade pathiripala",
-"ELECTRICITY",
-10000,
-"ONGOING"),
-
-new Project(
-"P004",
-"School Toilet",
-"EDUCATION",
-325000,
-"PROPOSED"
-),
-new Project(
-"P005",
-"Waste Collection Point",
-"SANITATION",
-180000,
-"COMPLETED"
-)
+    new Project(
+        "P001",
+        "East Colony Road",
+        "ENGINEERING",
+        850000,
+        "ONGOING",
+        LocalDate.of(2026, 1, 10)
+    ),
+    new Project(
+        "P002",
+        "Water Tank Renovation",
+        "WATER",
+        450000,
+        "COMPLETED",
+        LocalDate.of(2026, 2, 14)
+    ),
+    new Project(
+        "P003",
+        "Streetlight Upgrade",
+        "ELECTRICITY",
+        275000,
+        "ONGOING",
+        LocalDate.of(2026, 3, 1)
+    ),
+    new Project(
+        "P006",
+        "Streetlight Upgrade pathiripala",
+        "ELECTRICITY",
+        10000,
+        "ONGOING",
+        LocalDate.of(2026, 3, 20)
+    ),
+    new Project(
+        "P004",
+        "School Toilet",
+        "EDUCATION",
+        325000,
+        "PROPOSED",
+        LocalDate.of(2026, 3, 1)
+    ),
+    new Project(
+        "P005",
+        "Waste Collection Point",
+        "SANITATION",
+        180000,
+        "COMPLETED",
+        LocalDate.of(2026, 1, 25)
+    )
 );
+
 Map<String, Set<String>> volunteerSkills = Map.of(
 "Ravi", Set.of("DRIVING", "FIRST_AID", "ELECTRICAL"),
 "Anitha", Set.of("TEACHING", "FIRST_AID"),
@@ -1120,7 +1129,119 @@ largestProjectperDepartment.forEach((dept, optionalProject) -> {
 });
 	
 	
+//QUESTION 16 — Project Status Dashboard
 
+System.out.println("$$$$$$$$$$  QUESTION 16 — Project Status Dashboard  $$$$$$$$$$$ ");
+
+
+Map<String,Long> statusWiseCount  = projects.stream()
+                                           .collect(Collectors.groupingBy(n -> n.status(),Collectors.counting()));
+
+
+
+
+long totalCount  = statusWiseCount.values()
+               .stream()
+			   .mapToLong(n -> n)
+			   .sum();
+			   
+               
+			   
+
+
+
+
+for(Map.Entry<String,Long> p : statusWiseCount.entrySet()){
+		
+	String status1 = p.getKey();
+    long count = p.getValue();
+	
+	
+	//double percentage1 = (totalCount > 0) ?((count * 100.0) / totalCount) : 0.0;
+	
+	double per =  count * 100 / totalCount;
+	
+	System.out.println("Status : " + status1 + " count :  " +  count + " Percentage : " +  per);
+	
+	
+}
+
+//QUESTION 17 — Project Budget Ranking
+System.out.println("$$$$$$$$$$  QUESTION 17 — Project Budget Ranking  $$$$$$$$$$$ ");
+
+
+List<Project> projectBudgetRanking = projects.stream()
+        .sorted(Comparator.comparingDouble(Project :: budget).thenComparing(Project :: id).reversed())
+		
+        .collect(Collectors.toList());
+
+
+
+projectBudgetRanking.forEach(p -> System.out.println(p.id() + " : " + p.budget()));
+
+
+
+//QUESTION 18 — Project Timeline
+
+System.out.println("$$$$$$$$$$  QUESTION 18 — Project Timeline  $$$$$$$$$$$ ");
+
+TreeMap<LocalDate,List<Project>> dateWiseSort = projects.stream()
+
+                                                       
+                                                       .collect(Collectors.groupingBy(Project::startDate,TreeMap :: new ,Collectors.toList()));
+                                                         														
+
+
+
+System.out.println(dateWiseSort.get(LocalDate.of(2026, 3, 1)));
+
+
+
+
+//QUESTION 19 — Projects Within a Date Range
+System.out.println("$$$$$$$$$$  QUESTION 19 — Projects Within a Date Range  $$$$$$$$$$$ ");
+
+NavigableMap<LocalDate,List<Project>> projectsByDate = new TreeMap<>();
+
+
+
+for(Project p : projects){
+	
+	projectsByDate.computeIfAbsent(p.startDate(), k -> new ArrayList<>()).add(p);
+	
+	
+}
+
+System.out.println(projectsByDate.subMap(LocalDate.of(2026, 1, 10),LocalDate.of(2026, 3, 1)));
+
+
+//QUESTION 20 — Latest Project
+System.out.println("$$$$$$$$$$  QUESTION  QUESTION 20 — Latest Project  $$$$$$$$$$$ ");
+
+
+System.out.println("Last key method : " + projectsByDate.lastKey());
+
+System.out.println("Last Entry method : " + projectsByDate.lastEntry());
+
+
+
+
+//QUESTION 21 — Volunteer Skill Universe
+System.out.println("$$$$$$$$$$  QUESTION 21 — Volunteer Skill Universe  $$$$$$$$$$$ ");
+
+
+Set<String> updatedList = volunteerSkills.values().stream()
+               
+			   .flatMap(Collection::stream) // Unpacks each List<String> into String
+               .collect(Collectors.toSet());
+
+
+
+System.out.println(updatedList);
+
+
+//QUESTION 22 — Volunteer Capability Search
+System.out.println("$$$$$$$$$$  QUESTION 22 — Volunteer Capability Search  $$$$$$$$$$$ ");
 
 
 
