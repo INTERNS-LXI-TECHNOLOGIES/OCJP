@@ -41,6 +41,28 @@ public class Main {
                 String description
         ) {}
 
+        List<Complaint> complaints = List.of(
+                new Complaint("CMP002", "C003", "Water", 1, "OPEN",
+                        LocalDate.of(2025, 12, 13)),
+                new Complaint("CMP003", "C002", "Road", 3, "RESOLVED",
+                        LocalDate.of(2025, 12, 14)),
+                new Complaint("CMP004", "C007", "Streetlight", 2, "OPEN",
+                        LocalDate.of(2025, 12, 15)),
+                new Complaint("CMP005", "C004", "Waste", 3, "OPEN",
+                        LocalDate.of(2025, 12, 16)),
+                new Complaint("CMP006", "C005", "Water", 1, "RESOLVED",
+                        LocalDate.of(2025, 12, 17)),
+                new Complaint("CMP007", "C001", "Road", 1, "OPEN",
+                        LocalDate.of(2025, 12, 18)),
+                new Complaint("CMP008", "C008", "Streetlight", 3, "RESOLVED",
+                        LocalDate.of(2025, 12, 19)),
+                new Complaint("CMP009", "C006", "Waste", 2, "OPEN",
+                        LocalDate.of(2025, 12, 20)),
+                new Complaint("CMP010", "C003", "Water", 3, "OPEN",
+                        LocalDate.of(2025, 12, 21))
+        );
+
+
         List<Citizen> citizens = List.of(
                 new Citizen("C001", "Ravi", 42, "East Colony"),
                 new Citizen("C002", "Anitha", 35, "West Colony"),
@@ -67,6 +89,8 @@ public class Main {
                 "Waste",
                 "Water"
         );
+
+
 
 
 
@@ -103,8 +127,13 @@ System.out.println("Citizen Index: "+mapcitizen.get("C008"));
 
  //5
 
+Map<String,List<Complaint>> complaint=new HashMap<>();
+        for(Complaint c:complaints){
+    complaint.computeIfAbsent(c.citizenId(),k->new ArrayList<>()).add(c);
 
+}
 
-
+System.out.println("Complaint Index by Citizen : "+complaint);
+System.out.println("Complaint of C003 :  "+complaint.get("C003"));
     }
 }
