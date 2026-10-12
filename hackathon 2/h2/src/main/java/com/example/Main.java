@@ -1,5 +1,5 @@
 
-        package com.example;
+package com.example;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -14,7 +14,8 @@ public class Main {
                 String name,
                 int age,
                 String area
-        ) {}
+        ) {
+        }
 
         record Complaint(
                 String id,
@@ -23,7 +24,8 @@ public class Main {
                 int priority,
                 String status,
                 LocalDate registeredOn
-        ) {}
+        ) {
+        }
 
         record Project(
                 String id,
@@ -32,14 +34,16 @@ public class Main {
                 double budget,
                 String status,
                 LocalDate startDate
-        ) {}
+        ) {
+        }
 
 
         record Activity(
                 LocalDate date,
                 String type,
                 String description
-        ) {}
+        ) {
+        }
 
         List<Complaint> complaints = List.of(
                 new Complaint("CMP002", "C003", "Water", 1, "OPEN",
@@ -91,49 +95,66 @@ public class Main {
         );
 
 
-
-
-
-
         //1
 
-        Map<String,Citizen> mapcitizen=citizens.stream().collect(Collectors.toMap(Citizen::id,c->c));
-System.out.println("Citizen Index: "+mapcitizen.get("C008"));
+        Map<String, Citizen> mapcitizen = citizens.stream().collect(Collectors.toMap(Citizen::id, c -> c));
+        System.out.println("Citizen Index: " + mapcitizen.get("C008"));
 
 //2
-        Map<String,List<Citizen>> area=citizens.stream().collect(Collectors.groupingBy(c->c.area()));
-        System.out.println("Citizens by Area : "+area);
+        Map<String, List<Citizen>> area = citizens.stream().collect(Collectors.groupingBy(c -> c.area()));
+        System.out.println("Citizens by Area : " + area);
 
 //3
 
-      Map<String ,Long> population=  citizens.stream().collect(Collectors.groupingBy(Citizen::area,Collectors.counting()));
-        System.out.println("Calculate population by area. : "+population);
+        Map<String, Long> population = citizens.stream().collect(Collectors.groupingBy(Citizen::area, Collectors.counting()));
+        System.out.println("Calculate population by area. : " + population);
 
- //4
-        Map<String,List<Citizen>> byage=citizens.stream().collect(Collectors.groupingBy(a->{
-            if(a.age()<18)
+        //4
+        Map<String, List<Citizen>> byage = citizens.stream().collect(Collectors.groupingBy(a -> {
+            if (a.age() < 18)
                 return "CHILD";
-            else if(a.age()>=18 && a.age()<=35)
+            else if (a.age() >= 18 && a.age() <= 35)
                 return "YOUTH";
-            else if(a.age()>=36 && a.age()<=59)
+            else if (a.age() >= 36 && a.age() <= 59)
                 return "ADULT";
             else
                 return "SENIOR";
         }));
-        System.out.println("YOUTH : "+byage.get("YOUTH"));
-        System.out.println("ADULT : "+byage.get("ADULT"));
-        System.out.println("SENIOR : "+byage.get("SENIOR"));
+        System.out.println("YOUTH : " + byage.get("YOUTH"));
+        System.out.println("ADULT : " + byage.get("ADULT"));
+        System.out.println("SENIOR : " + byage.get("SENIOR"));
 
 
- //5
+        //5
 
-Map<String,List<Complaint>> complaint=new HashMap<>();
-        for(Complaint c:complaints){
-    complaint.computeIfAbsent(c.citizenId(),k->new ArrayList<>()).add(c);
+        Map<String, List<Complaint>> complaint = new HashMap<>();
+        for (Complaint c : complaints) {
+            complaint.computeIfAbsent(c.citizenId(), k -> new ArrayList<>()).add(c);
 
-}
+        }
 
-System.out.println("Complaint Index by Citizen : "+complaint);
-System.out.println("Complaint of C003 :  "+complaint.get("C003"));
+        System.out.println("Complaint Index by Citizen : " + complaint);
+        System.out.println("Complaint of C003 :  " + complaint.get("C003"));
+
+
+//6
+        List<Complaint> status = complaints.stream().filter(c -> c.status().equals("OPEN")).toList();
+
+        PriorityQueue<Complaint> pq = new PriorityQueue<>(Comparator.comparingInt(Complaint::priority).thenComparing(Complaint::registeredOn));
+        pq.addAll(status);
+
+        while (pq.isEmpty()) {
+            Complaint c = pq.poll();
+            System.out.println("Priority complaint order : " + c);
+        }
+
+   //7
+
+        System.out.println("Highest Priority Complaint: "+ pq.peek());
+
+
     }
 }
+
+
+
