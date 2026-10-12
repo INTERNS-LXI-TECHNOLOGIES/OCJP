@@ -112,7 +112,11 @@ LocalDate startDate
 	
 }
 
-
+record Activity(
+LocalDate date,
+String type,
+String description
+) {}
 
 
 // my class 
@@ -332,6 +336,22 @@ Map<String, Set<String>> volunteerSkills = Map.of(
 );
 
 
+List<Activity> activities = List.of(
+            new Activity(LocalDate.of(2026, 10, 12), "MEETING",  "Weekly team sync"),
+            new Activity(LocalDate.of(2026, 10, 11), "EXERCISE", "Morning 5 km run"),
+            new Activity(LocalDate.of(2026, 10, 10), "STUDY",    "Completed Java records tutorial"),
+            new Activity(LocalDate.of(2026, 10, 9),  "TRAVEL",   "Train trip to Kochi"),
+            new Activity(LocalDate.of(2026, 10, 8),  "WORK",     "Code review for payment module"),
+            new Activity(LocalDate.of(2026, 10, 7),  "SHOPPING", "Bought groceries for the week"),
+            new Activity(LocalDate.of(2026, 10, 6),  "HEALTH",   "Annual dental check-up"),
+            new Activity(LocalDate.of(2026, 10, 5),  "SOCIAL",   "Dinner with friends"),
+            new Activity(LocalDate.of(2026, 10, 4),  "HOBBY",    "Played guitar for an hour"),
+            new Activity(LocalDate.of(2026, 10, 3),  "CHORES",   "Cleaned and organized the study room")
+        );
+
+
+
+
 
 //Question 1 
 List<Citizen> citizensList = new ArrayList<>();
@@ -379,7 +399,7 @@ visits.addFirst("Flooding inspection");
 	
 visits.addLast("Market sanitation inspection");	
 	
-	System.out.println("After Api call Result " + visits);
+System.out.println("After Api call Result " + visits);
 	
 	
 	
@@ -1244,6 +1264,114 @@ System.out.println(updatedList);
 System.out.println("$$$$$$$$$$  QUESTION 22 — Volunteer Capability Search  $$$$$$$$$$$ ");
 
 
+for(Map.Entry<String,Set<String>> entry : volunteerSkills.entrySet()){
+	String volunteers = entry.getKey();
+ Set<String>  skills =  entry.getValue();
+
+
+List<String> skillsCheck = List.of("FIRST_AID","ELECTRICAL");
+	
+	if(skills.containsAll(skillsCheck)){
+		
+		
+		System.out.println("Volunteer : " + volunteers);
+		
+		
+	}
+	
+	
+	
+	
+} 
+
+//QUESTION 23 — Reverse Skill Index
+System.out.println("$$$$$$$$$$  QUESTION 23 — Reverse Skill Index  $$$$$$$$$$$ ");
+
+Map<String,List<String>> skillIndex = new HashMap<>();
+List<String> names = new ArrayList<>();
+
+for(Map.Entry<String,Set<String>> skEntry :  volunteerSkills.entrySet()){
+
+	
+	String myKeyName2  = skEntry.getKey();
+    	
+	
+if(skEntry.getValue().contains("FIRST_AID")){
+	
+//System.out.println(myKeyName2);
+
+	names.add(myKeyName2);	
+}
+}
+
+skillIndex.put("FIRST_AID",names);
+System.out.println(skillIndex.get("FIRST_AID"));
+
+
+
+System.out.println("$$$$$$$$$$  QUESTION 24 — Common Skills  $$$$$$$$$$$ ");
+//QUESTION 24 — Common Skills
+
+
+List<String>  skil = new ArrayList<>();
+
+
+
+Set<String> arun = volunteerSkills.get("Arun");
+
+Set<String> ravi = volunteerSkills.get("Ravi");
+
+	//System.out.println(arun);
+    //System.out.println(ravi);
+
+skil.addAll(arun);
+skil.addAll(ravi);
+
+List<String> newList = arun.stream()
+                           .filter(ravi::contains)
+                           .distinct()
+                           .collect(Collectors.toList());	
+
+
+System.out.println(newList);
+
+
+NavigableMap<LocalDate,List<Activity>> dateWiseActivity  = new  TreeMap<>();
+
+
+for(Activity a : activities){
+	
+	
+
+	
+	
+	dateWiseActivity.computeIfAbsent(a.date(), k -> new ArrayList<>()).add(a);
+	
+	
+}
+
+
+System.out.println(dateWiseActivity.get(LocalDate.of(2026, 10, 9)));
+
+
+//QUESTION 26 — Latest N Activities
+
+System.out.println("$$$$$$$$$$  QUESTION 26 — Latest N Activities  $$$$$$$$$$$ ");
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+System.out.println(latestActivities(activities,2));
+
+
+
 
 
 }//close main method 
@@ -1290,6 +1418,58 @@ public static Project giveMeProject(List<Project> projects,String projectId){
 	
 	
 }
+
+
+
+
+
+
+
+public static List<Activity> latestActivities(List<Activity> activities,int n){
+	
+	
+List<Activity>  activityList = new ArrayList<>();
+
+List<Activity>  sortedList = new ArrayList<>();
+
+
+
+
+	
+sortedList = activities.stream()
+            .sorted(Comparator.comparing(Activity :: date).reversed())
+			.collect(Collectors.toList());
+
+
+int length = Math.min(activities.size(),n);
+	
+
+
+	for(int i=0;i<length;i++){
+	
+	Activity  a = sortedList.get(i);
+	
+	activityList.add(a);
+	
+	
+
+	
+	
+	
+}
+
+
+	
+
+
+
+return  activityList;
+
+	
+	
+	
+}
+
 
 
 
