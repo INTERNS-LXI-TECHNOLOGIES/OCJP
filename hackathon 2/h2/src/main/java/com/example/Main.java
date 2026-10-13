@@ -148,13 +148,41 @@ public class Main {
             System.out.println("Priority complaint order : " + c);
         }
 
-   //7
+        //7
 
-        System.out.println("Highest Priority Complaint: "+ pq.peek());
+        System.out.println("Highest Priority Complaint: " + pq.peek());
+
+
+        //8
+        Map<String, Map<String, List<Complaint>>> nestedmap = new HashMap<>();
+        Map<String, Map<String, List<Complaint>>> cs = complaints.stream().collect(Collectors.groupingBy(Complaint::category, Collectors.groupingBy(Complaint::status)));
+
+        System.out.println("Complaint Category × Status :" + cs);
+
+//9
+        Map<String, Long> totalCount = complaints.stream().collect(Collectors.groupingBy(Complaint::category, Collectors.counting()));
+        Map<String,Long> resolvedCount=complaints.stream().filter(c->c.status().equals("RESOLVED")).collect(Collectors.groupingBy(Complaint::category,Collectors.counting()));
+
+        for (String category : totalCount.keySet()) {
+            long total = totalCount.get(category);
+            long resolved = resolvedCount.getOrDefault(category, 0L);
+            double rate = (resolved * 100.0) / total;
+            System.out.println(category + " : " + rate + "%");
+        }
+
+//10
+
+Set<Complaint> s= new HashSet<>(complaints);
+  Map<String,Long> d= s.stream().filter(c->c.status().equals("OPEN")).collect(Collectors.groupingBy(Complaint::category,Collectors.counting()));
+  Set<String> ca=d.entrySet().stream().filter(e->e.getValue()>=2).map(Map.Entry::getKey).collect(Collectors.toSet());
+System.out.println("Categories Requiring Attention:"+ca);
+
+
 
 
     }
-}
+    }
+
 
 
 
