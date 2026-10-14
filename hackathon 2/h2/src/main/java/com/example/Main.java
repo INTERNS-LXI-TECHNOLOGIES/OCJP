@@ -372,6 +372,47 @@ public class Main {
         .collect(Collectors.groupingBy(x->YearMonth.from(x.date()),Collectors.groupingBy(Activity::type,Collectors.counting())));
 System.out.println("27.Activity Type × Month  :"+activityCount);
 
+//28
+        Map<String, Long> categoryCount = complaints.stream()
+                .collect(Collectors.groupingBy(
+                        Complaint::category,
+                        Collectors.counting()
+                ));
+
+        List<Map.Entry<String, Long>> topThree = categoryCount.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue()
+                        .reversed()
+                        .thenComparing(Map.Entry::getKey))
+                .limit(3)
+                .toList();
+
+        System.out.println("28. Top Three Complaint Categories: " + topThree);
+
+
+ //29
+
+        Map<String, Integer> riskIndex = complaints.stream()
+                .collect(Collectors.groupingBy(
+                        Complaint::category,
+                        Collectors.summingInt(c ->
+                                (c.status().equalsIgnoreCase("OPEN") ? 2 : 0)
+                                        + (c.priority() == 3 ? 3 : 0)
+                        )
+                ));
+
+        List<Map.Entry<String, Integer>> riskRanking = riskIndex.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue()
+                        .reversed()
+                        .thenComparing(Map.Entry::getKey))
+                .toList();
+
+        System.out.println("29. Governance Risk Index: " + riskRanking);
+
+
+
+
 
 
     }
@@ -390,7 +431,7 @@ System.out.println("27.Activity Type × Month  :"+activityCount);
 
 
     }
-//27
+
 
 }
 
