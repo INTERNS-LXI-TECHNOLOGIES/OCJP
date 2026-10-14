@@ -94,7 +94,22 @@ public class Main {
                 "Water"
         );
 
+        List<Project> projects = List.of(
+                new Project("P001", "East Colony Road", "ENGINEERING", 850000,
+                        "ONGOING", LocalDate.of(2026, 7, 10)),
 
+                new Project("P002", "Water Tank Renovation", "WATER", 450000,
+                        "COMPLETED", LocalDate.of(2026, 6, 15)),
+
+                new Project("P003", "Streetlight Upgrade", "ELECTRICITY", 275000,
+                        "ONGOING", LocalDate.of(2026, 8, 5)),
+
+                new Project("P004", "School Toilet", "EDUCATION", 325000,
+                        "PROPOSED", LocalDate.of(2026, 7, 10)),
+
+                new Project("P005", "Waste Collection Point", "SANITATION", 180000,
+                        "COMPLETED", LocalDate.of(2026, 9, 1))
+        );
         //1
 
         Map<String, Citizen> mapcitizen = citizens.stream().collect(Collectors.toMap(Citizen::id, c -> c));
@@ -179,7 +194,107 @@ System.out.println("Categories Requiring Attention:"+ca);
 
 
 
+//11
+        List<String> unique = complaintCategories.stream()
+                .distinct()
+                .toList();
 
+        System.out.println(unique);
+
+
+ //12
+        Map<String, Project> projectIndex = projects.stream()
+                .collect(Collectors.toMap(Project::id, p -> p));
+
+        System.out.println(projectIndex.get("P006"));
+
+
+
+//13
+
+        Map<String, List<Project>> byDepartment = projects.stream()
+                .collect(Collectors.groupingBy(
+                        Project::department,
+                        TreeMap::new,
+                        Collectors.toList()
+                ));
+
+        System.out.println(byDepartment);
+
+//14
+        Map<String, Double> budget = projects.stream()
+                .collect(Collectors.groupingBy(
+                        Project::department,
+                        TreeMap::new,
+                        Collectors.summingDouble(Project::budget)
+                ));
+
+        System.out.println(budget);
+
+  //15
+        Map<String, Optional<Project>> largest = projects.stream()
+                .collect(Collectors.groupingBy(
+                        Project::department,
+                        TreeMap::new,
+                        Collectors.maxBy(Comparator.comparingDouble(Project::budget))
+                ));
+
+        largest.forEach((department, project) ->
+                System.out.println(department + " : " + project.orElse(null)));
+
+
+
+//16
+
+        Map<String, Long> statusCount = projects.stream()
+                .collect(Collectors.groupingBy(Project::status, Collectors.counting()));
+
+        long total = projects.size();
+
+        statusCount.forEach((statuss, count) -> {
+            double percentage = count * 100.0 / total;
+            System.out.println(status + " : " + count + " : " + percentage + "%");
+        });
+
+//17
+        List<Project> ranking = projects.stream()
+                .sorted(Comparator.comparingDouble(Project::budget)
+                        .reversed()
+                        .thenComparing(Project::id))
+                .toList();
+
+        ranking.forEach(System.out::println);
+
+
+        //18
+        Map<LocalDate, List<Project>> timeline = projects.stream()
+                .collect(Collectors.groupingBy(
+                        Project::startDate,
+                        TreeMap::new,
+                        Collectors.toList()
+                ));
+
+        System.out.println(timeline.get(LocalDate.of(2026, 7, 1)));
+
+
+        //19
+        NavigableMap<LocalDate, List<Project>> timelinee = projects.stream()
+                .collect(Collectors.groupingBy(
+                        Project::startDate,
+                        TreeMap::new,
+                        Collectors.toList()
+                ));
+
+        NavigableMap<LocalDate, List<Project>> range = timelinee.subMap(
+                LocalDate.of(2026, 7, 1), true,
+                LocalDate.of(2026, 9, 1), true
+        );
+
+        System.out.println(range);
+
+//20
+        System.out.println("Latest date: " + timelinee.lastKey());
+        System.out.println("Latest projects: " + timelinee.lastEntry().getValue());
     }
     }
 
