@@ -2,12 +2,34 @@
 package com.example;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
 
+    record Activity(
+            LocalDate date,
+            String type,
+            String description
+    ) {
+    }
+
+    static List<Activity> activities = List.of(
+            new Activity(LocalDate.of(2026, 7, 10), "MEETING", "Ward meeting"),
+            new Activity(LocalDate.of(2026, 7, 5), "CLEANUP", "Road cleaning"),
+            new Activity(LocalDate.of(2026, 7, 10), "INSPECTION", "Road inspection"),
+            new Activity(LocalDate.of(2026, 7, 15), "MEETING", "Project review"),
+            new Activity(LocalDate.of(2026, 7, 5), "REPAIR", "Streetlight repair"),
+            new Activity(LocalDate.of(2026, 8, 1), "CLEANUP", "Park cleaning")
+
+
+    );
+
+
     public static void main(String[] args) {
+
 
         record Citizen(
                 String id,
@@ -37,13 +59,6 @@ public class Main {
         ) {
         }
 
-
-        record Activity(
-                LocalDate date,
-                String type,
-                String description
-        ) {
-        }
 
         List<Complaint> complaints = List.of(
                 new Complaint("CMP002", "C003", "Water", 1, "OPEN",
@@ -110,19 +125,28 @@ public class Main {
                 new Project("P005", "Waste Collection Point", "SANITATION", 180000,
                         "COMPLETED", LocalDate.of(2026, 9, 1))
         );
+
+
+        Map<String, Set<String>> volunteerSkills = Map.of(
+                "Ravi", Set.of("DRIVING", "FIRST_AID", "ELECTRICAL"),
+                "Anitha", Set.of("TEACHING", "FIRST_AID"),
+                "Suresh", Set.of("DRIVING", "ELECTRICAL"),
+                "Meena", Set.of("TEACHING", "FIRST_AID", "COUNSELLING"),
+                "Arun", Set.of("DRIVING", "ELECTRICAL", "FIRST_AID")
+        );
         //1
 
         Map<String, Citizen> mapcitizen = citizens.stream().collect(Collectors.toMap(Citizen::id, c -> c));
-        System.out.println("Citizen Index: " + mapcitizen.get("C008"));
+        System.out.println("1.Citizen Index: " + mapcitizen.get("C008"));
 
 //2
         Map<String, List<Citizen>> area = citizens.stream().collect(Collectors.groupingBy(c -> c.area()));
-        System.out.println("Citizens by Area : " + area);
+        System.out.println("2.Citizens by Area : " + area);
 
 //3
 
         Map<String, Long> population = citizens.stream().collect(Collectors.groupingBy(Citizen::area, Collectors.counting()));
-        System.out.println("Calculate population by area. : " + population);
+        System.out.println("3.Calculate population by area. : " + population);
 
         //4
         Map<String, List<Citizen>> byage = citizens.stream().collect(Collectors.groupingBy(a -> {
@@ -135,9 +159,9 @@ public class Main {
             else
                 return "SENIOR";
         }));
-        System.out.println("YOUTH : " + byage.get("YOUTH"));
-        System.out.println("ADULT : " + byage.get("ADULT"));
-        System.out.println("SENIOR : " + byage.get("SENIOR"));
+        System.out.println("4.YOUTH : " + byage.get("YOUTH"));
+        System.out.println("4.ADULT : " + byage.get("ADULT"));
+        System.out.println("4.SENIOR : " + byage.get("SENIOR"));
 
 
         //5
@@ -148,8 +172,8 @@ public class Main {
 
         }
 
-        System.out.println("Complaint Index by Citizen : " + complaint);
-        System.out.println("Complaint of C003 :  " + complaint.get("C003"));
+        System.out.println("5.Complaint Index by Citizen : " + complaint);
+        System.out.println("5.Complaint of C003 :  " + complaint.get("C003"));
 
 
 //6
@@ -160,38 +184,37 @@ public class Main {
 
         while (pq.isEmpty()) {
             Complaint c = pq.poll();
-            System.out.println("Priority complaint order : " + c);
+            System.out.println("6.Priority complaint order : " + c);
         }
 
         //7
 
-        System.out.println("Highest Priority Complaint: " + pq.peek());
+        System.out.println("7.Highest Priority Complaint: " + pq.peek());
 
 
         //8
         Map<String, Map<String, List<Complaint>>> nestedmap = new HashMap<>();
         Map<String, Map<String, List<Complaint>>> cs = complaints.stream().collect(Collectors.groupingBy(Complaint::category, Collectors.groupingBy(Complaint::status)));
 
-        System.out.println("Complaint Category × Status :" + cs);
+        System.out.println("8.Complaint Category × Status :" + cs);
 
 //9
         Map<String, Long> totalCount = complaints.stream().collect(Collectors.groupingBy(Complaint::category, Collectors.counting()));
-        Map<String,Long> resolvedCount=complaints.stream().filter(c->c.status().equals("RESOLVED")).collect(Collectors.groupingBy(Complaint::category,Collectors.counting()));
+        Map<String, Long> resolvedCount = complaints.stream().filter(c -> c.status().equals("RESOLVED")).collect(Collectors.groupingBy(Complaint::category, Collectors.counting()));
 
         for (String category : totalCount.keySet()) {
             long total = totalCount.get(category);
             long resolved = resolvedCount.getOrDefault(category, 0L);
             double rate = (resolved * 100.0) / total;
-            System.out.println(category + " : " + rate + "%");
+            System.out.println("9." + category + " : " + rate + "%");
         }
 
 //10
 
-Set<Complaint> s= new HashSet<>(complaints);
-  Map<String,Long> d= s.stream().filter(c->c.status().equals("OPEN")).collect(Collectors.groupingBy(Complaint::category,Collectors.counting()));
-  Set<String> ca=d.entrySet().stream().filter(e->e.getValue()>=2).map(Map.Entry::getKey).collect(Collectors.toSet());
-System.out.println("Categories Requiring Attention:"+ca);
-
+        Set<Complaint> s = new HashSet<>(complaints);
+        Map<String, Long> d = s.stream().filter(c -> c.status().equals("OPEN")).collect(Collectors.groupingBy(Complaint::category, Collectors.counting()));
+        Set<String> ca = d.entrySet().stream().filter(e -> e.getValue() >= 2).map(Map.Entry::getKey).collect(Collectors.toSet());
+        System.out.println("10.Categories Requiring Attention:" + ca);
 
 
 //11
@@ -199,15 +222,14 @@ System.out.println("Categories Requiring Attention:"+ca);
                 .distinct()
                 .toList();
 
-        System.out.println(unique);
+        System.out.println("11." + unique);
 
 
- //12
+        //12
         Map<String, Project> projectIndex = projects.stream()
                 .collect(Collectors.toMap(Project::id, p -> p));
 
-        System.out.println(projectIndex.get("P006"));
-
+        System.out.println("12." + projectIndex.get("P006"));
 
 
 //13
@@ -219,7 +241,7 @@ System.out.println("Categories Requiring Attention:"+ca);
                         Collectors.toList()
                 ));
 
-        System.out.println(byDepartment);
+        System.out.println("13." + byDepartment);
 
 //14
         Map<String, Double> budget = projects.stream()
@@ -229,9 +251,9 @@ System.out.println("Categories Requiring Attention:"+ca);
                         Collectors.summingDouble(Project::budget)
                 ));
 
-        System.out.println(budget);
+        System.out.println("14." + budget);
 
-  //15
+        //15
         Map<String, Optional<Project>> largest = projects.stream()
                 .collect(Collectors.groupingBy(
                         Project::department,
@@ -240,8 +262,7 @@ System.out.println("Categories Requiring Attention:"+ca);
                 ));
 
         largest.forEach((department, project) ->
-                System.out.println(department + " : " + project.orElse(null)));
-
+                System.out.println("15." + department + " : " + project.orElse(null)));
 
 
 //16
@@ -253,7 +274,7 @@ System.out.println("Categories Requiring Attention:"+ca);
 
         statusCount.forEach((statuss, count) -> {
             double percentage = count * 100.0 / total;
-            System.out.println(status + " : " + count + " : " + percentage + "%");
+            System.out.println("16." + status + " : " + count + " : " + percentage + "%");
         });
 
 //17
@@ -274,7 +295,7 @@ System.out.println("Categories Requiring Attention:"+ca);
                         Collectors.toList()
                 ));
 
-        System.out.println(timeline.get(LocalDate.of(2026, 7, 1)));
+        System.out.println("18." + timeline.get(LocalDate.of(2026, 7, 1)));
 
 
         //19
@@ -290,13 +311,91 @@ System.out.println("Categories Requiring Attention:"+ca);
                 LocalDate.of(2026, 9, 1), true
         );
 
-        System.out.println(range);
+        System.out.println("19." + range);
 
 //20
-        System.out.println("Latest date: " + timelinee.lastKey());
-        System.out.println("Latest projects: " + timelinee.lastEntry().getValue());
+        System.out.println("20.Latest date: " + timelinee.lastKey());
+        System.out.println("20.Latest projects: " + timelinee.lastEntry().getValue());
+
+
+//21
+        Set<String> volSkills = volunteerSkills.values()
+                .stream()
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
+
+        System.out.println("21.Volunteer Skill Universe :" + volSkills);
+
+
+        //22
+
+        List<String> b = volunteerSkills.entrySet().stream().
+                filter(k -> k.getValue().contains("FIRST_AID") && k.getValue().contains("ELECTRICAL"))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        System.out.println("22.Volunteer Capability Search :" + b);
+
+//23
+        Map<String, Set<String>> reverseMap = new HashMap<>();
+        for (Map.Entry<String, Set<String>> m : volunteerSkills.entrySet()) {
+            String volunteersName = m.getKey();
+            Set<String> skills = m.getValue();
+
+            for (String skill : skills) {
+                reverseMap.computeIfAbsent(skill, n -> new HashSet<>())
+                        .add(volunteersName);
+            }
+        }
+        System.out.println("23.Reverse Skill Index :" + reverseMap);
+
+//24
+        Set<String> raviSkills = volunteerSkills.get("Ravi");
+        Set<String> arunSkills = volunteerSkills.get("Arun");
+        Set<String> commonSkills = raviSkills.stream()
+                .filter(p -> arunSkills.contains(p))
+                .collect(Collectors.toSet());
+        System.out.println("24.Common Skills :" + commonSkills);
+
+        //25
+        TreeMap<LocalDate, List<Activity>> datewiseActivity = activities.stream()
+                .collect(Collectors.groupingBy(Activity::date, TreeMap::new, Collectors.toList()));
+        System.out.println("25.Activity Timeline" + datewiseActivity);
+
+
+        //26 method call
+        System.out.println("26. Latest Activities: " + latestActivities(activities, 3));
+
+
+        //27
+        Map<YearMonth,Map<String,Long>> activityCount= activities.stream()
+                .filter(m->m.type().equals("MEETING") || m.type().equals("CLEANUP") || m.type().equals("INSPECTION"))
+        .collect(Collectors.groupingBy(x->YearMonth.from(x.date()),Collectors.groupingBy(Activity::type,Collectors.counting())));
+System.out.println("27.Activity Type × Month  :"+activityCount);
+
+
+
     }
+
+    //26
+
+    static List<Activity> latestActivities(List<Activity> activities, int n) {
+
+        List<Activity> x = activities.stream()
+                .sorted(Comparator.comparing(Activity::date).reversed())
+                .limit(n)
+                .toList();
+        return x;
+
+
+
+
     }
+//27
+
+}
+
+
+
 
 
 
